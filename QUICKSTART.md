@@ -29,7 +29,7 @@ php artisan vendor:publish --tag=cloudflare-dns-config
 php artisan vendor:publish --tag=cloudflare-dns-configurator-views
 
 # Add to config/app.php providers array:
-# Pterodactyl\Plugins\CloudflareDnsConfigurator\Providers\CloudflareDnsServiceProvider::class
+# Pterodactyl\Plugins\CloudflareDnsConfigurator\CloudflareDnsConfiguratorPlugin::class
 
 # Run migration and clear cache
 php artisan migrate

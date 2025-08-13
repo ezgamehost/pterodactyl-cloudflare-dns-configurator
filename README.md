@@ -89,7 +89,7 @@ Add the service provider to your `config/app.php` file in the `providers` array:
 ```php
 'providers' => [
     // ... other providers
-    Pterodactyl\Plugins\CloudflareDnsConfigurator\Providers\CloudflareDnsServiceProvider::class,
+    Pterodactyl\Plugins\CloudflareDnsConfigurator\CloudflareDnsConfiguratorPlugin::class,
 ],
 ```
 
@@ -184,7 +184,7 @@ Edit `config/app.php` and add to the `providers` array:
 ```php
 'providers' => [
     // ... other providers
-    Pterodactyl\Plugins\CloudflareDnsConfigurator\Providers\CloudflareDnsServiceProvider::class,
+    Pterodactyl\Plugins\CloudflareDnsConfigurator\CloudflareDnsConfiguratorPlugin::class,
 ],
 ```
 
@@ -330,7 +330,7 @@ CloudflareDnsConfigurator/
 ├── Services/
 │   └── CloudflareDnsService.php        # Cloudflare API service
 ├── Providers/
-│   └── CloudflareDnsServiceProvider.php # Laravel service provider
+│   └── CloudflareDnsConfiguratorPlugin.php # Main plugin class (extends ServiceProvider)
 ├── config/
 │   └── cloudflare.php                   # Configuration file
 ├── composer.json                        # Dependencies

@@ -2,15 +2,13 @@
 
 namespace Pterodactyl\Plugins\CloudflareDnsConfigurator;
 
-use Pterodactyl\Contracts\Plugin\PluginInterface;
-use Pterodactyl\Services\Servers\ServerCreationService;
-use Pterodactyl\Services\Servers\ServerDeletionService;
 use Pterodactyl\Events\Server\ServerCreated;
 use Pterodactyl\Events\Server\ServerDeleted;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\ServiceProvider;
 
-class CloudflareDnsConfiguratorPlugin implements PluginInterface
+class CloudflareDnsConfiguratorPlugin extends ServiceProvider
 {
     /**
      * The plugin's name.
@@ -28,10 +26,42 @@ class CloudflareDnsConfiguratorPlugin implements PluginInterface
     public const DESCRIPTION = 'Automatically configures Cloudflare DNS records when Pterodactyl servers are created or deleted.';
 
     /**
-     * Boot the plugin.
+     * Register services.
+     */
+    public function register(): void
+    {
+        // Register the Cloudflare DNS service as a singleton
+        $this->app->singleton(\Pterodactyl\Plugins\CloudflareDnsConfigurator\Services\CloudflareDnsService::class, function ($app) {
+            return new \Pterodactyl\Plugins\CloudflareDnsConfigurator\Services\CloudflareDnsService();
+        });
+
+        // Merge the configuration
+        $this->mergeConfigFrom(
+            __DIR__ . '/config/cloudflare.php', 'cloudflare'
+        );
+    }
+
+    /**
+     * Bootstrap services.
      */
     public function boot(): void
     {
+        // Publish the configuration file
+        $this->publishes([
+            __DIR__ . '/config/cloudflare.php' => config_path('cloudflare.php'),
+        ], 'cloudflare-dns-config');
+
+        // Publish views
+        $this->publishes([
+            __DIR__ . '/Views' => resource_path('views/vendor/cloudflare-dns-configurator'),
+        ], 'cloudflare-dns-configurator-views');
+
+        // Load views from the plugin
+        $this->loadViewsFrom(__DIR__ . '/Views', 'cloudflare-dns-configurator');
+
+        // Register view components
+        $this->registerViewComponents();
+
         // Register event listeners
         Event::listen(ServerCreated::class, [$this, 'onServerCreated']);
         Event::listen(ServerDeleted::class, [$this, 'onServerDeleted']);
@@ -326,6 +356,17 @@ class CloudflareDnsConfiguratorPlugin implements PluginInterface
                 'error' => $e->getMessage(),
             ]);
         }
+    }
+
+    /**
+     * Register view components.
+     */
+    private function registerViewComponents(): void
+    {
+        // Register Blade components
+        \Illuminate\Support\Facades\Blade::component('dns-info-card', \Pterodactyl\Plugins\CloudflareDnsConfigurator\Views\Components\DnsInfoCard::class);
+        \Illuminate\Support\Facades\Blade::component('server-connection-info', \Pterodactyl\Plugins\CloudflareDnsConfigurator\Views\Components\ServerConnectionInfo::class);
+        \Illuminate\Support\Facades\Blade::component('server-connection-compact', \Pterodactyl\Plugins\CloudflareDnsConfigurator\Views\Components\ServerConnectionCompact::class);
     }
 
     /**

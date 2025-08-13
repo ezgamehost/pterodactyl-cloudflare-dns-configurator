@@ -22,7 +22,7 @@ echo "✅ Plugin files found\n";
 $requiredFiles = [
     'CloudflareDnsConfiguratorPlugin.php',
     'Services/CloudflareDnsService.php',
-    'Providers/CloudflareDnsServiceProvider.php',
+    'CloudflareDnsConfiguratorPlugin.php',
     'config/cloudflare.php',
     'Views/components/dns-info-card.blade.php',
     'composer.json'
@@ -40,7 +40,7 @@ echo "\n📋 Installation Steps:\n";
 echo "1. Copy this plugin to: /path/to/pterodactyl/app/Plugins/CloudflareDnsConfigurator/\n";
 echo "2. Run: composer install\n";
 echo "3. Add to config/app.php providers:\n";
-echo "   Pterodactyl\\Plugins\\CloudflareDnsConfigurator\\Providers\\CloudflareDnsServiceProvider::class\n";
+echo "   Pterodactyl\\Plugins\\CloudflareDnsConfigurator\\CloudflareDnsConfiguratorPlugin::class\n";
 echo "4. Publish configuration: php artisan vendor:publish --tag=cloudflare-dns-config\n";
 echo "5. Publish views: php artisan vendor:publish --tag=cloudflare-dns-configurator-views\n";
 echo "6. Run migration: php artisan migrate\n";
