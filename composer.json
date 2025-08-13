@@ -1,5 +1,6 @@
 {
     "name": "pterodactyl/cloudflare-dns-configurator",
+    "version": "1.0.0",
     "description": "Automatically configures Cloudflare DNS records when Pterodactyl servers are created or deleted",
     "type": "pterodactyl-plugin",
     "license": "GPL-3.0-only",

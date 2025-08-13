@@ -82,23 +82,18 @@ class CloudflareDnsConfiguratorPlugin extends ServiceProvider
      */
     private function addCustomFields(): void
     {
-        // Extend the server model to add DNS-related fields
-        \Pterodactyl\Models\Server::extend(function ($model) {
-            $model->casts['dns_name'] = 'string';
-            $model->casts['dns_configured'] = 'boolean';
-            $model->casts['dns_last_updated'] = 'datetime';
-        });
-
-        // Add accessor for the full DNS name
-        \Pterodactyl\Models\Server::extend(function ($model) {
-            $model->addAccessor('full_dns_name', function () {
-                if ($this->dns_name) {
-                    $domainSuffix = config('cloudflare.domain_suffix', '');
-                    return $this->dns_name . $domainSuffix;
-                }
-                return null;
-            });
-        });
+        try {
+            // For now, we'll skip model extension to avoid compatibility issues
+            // The DNS functionality will work without extending the model
+            // Custom fields can be added via database migration instead
+            
+            Log::info('Cloudflare DNS Configurator - Model extension skipped for compatibility');
+        } catch (\Exception $e) {
+            Log::error('Cloudflare DNS Configurator - Error in addCustomFields', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+        }
     }
 
     /**
