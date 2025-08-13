@@ -34,8 +34,35 @@ class CloudflareDnsServiceProvider extends ServiceProvider
             __DIR__ . '/../config/cloudflare.php' => config_path('cloudflare.php'),
         ], 'cloudflare-dns-config');
 
+        // Publish views
+        $this->publishes([
+            __DIR__ . '/../Views' => resource_path('views/vendor/cloudflare-dns-configurator'),
+        ], 'cloudflare-dns-configurator-views');
+
+        // Load views from the plugin
+        $this->loadViewsFrom(__DIR__ . '/../Views', 'cloudflare-dns-configurator');
+
+        // Register view components
+        $this->registerViewComponents();
+
         // Load the plugin
         $this->loadPlugin();
+
+        // Log that the service provider has booted
+        if (config('cloudflare.debug', false)) {
+            \Illuminate\Support\Facades\Log::info('CloudflareDnsServiceProvider booted successfully');
+        }
+    }
+
+    /**
+     * Register view components.
+     */
+    private function registerViewComponents(): void
+    {
+        // Register Blade components
+        \Illuminate\Support\Facades\Blade::component('dns-info-card', \Pterodactyl\Plugins\CloudflareDnsConfigurator\Views\Components\DnsInfoCard::class);
+        \Illuminate\Support\Facades\Blade::component('server-connection-info', \Pterodactyl\Plugins\CloudflareDnsConfigurator\Views\Components\ServerConnectionInfo::class);
+        \Illuminate\Support\Facades\Blade::component('server-connection-compact', \Pterodactyl\Plugins\CloudflareDnsConfigurator\Views\Components\ServerConnectionCompact::class);
     }
 
     /**

@@ -7,9 +7,12 @@ Get the Cloudflare DNS Configurator plugin running in under 5 minutes!
 ### 1. Clone the Plugin
 ```bash
 cd /path/to/your/pterodactyl
-git clone https://github.com/yourusername/whmcs-pterodactyl-cloudflare-dns-configurator.git app/Plugins/CloudflareDnsConfigurator
+git clone https://github.com/yourusername/pterodactyl-cloudflare-dns-configurator.git app/Plugins/CloudflareDnsConfigurator
 cd app/Plugins/CloudflareDnsConfigurator
 composer install
+
+# Verify installation
+php install-verify.php
 ```
 
 ### 2. Quick Configuration
@@ -21,7 +24,7 @@ nano .env  # Add your Cloudflare API token and zone ID
 
 ### 3. Install and Activate
 ```bash
-# Publish everything
+# Publish configuration and views
 php artisan vendor:publish --tag=cloudflare-dns-config
 php artisan vendor:publish --tag=cloudflare-dns-configurator-views
 
@@ -31,6 +34,7 @@ php artisan vendor:publish --tag=cloudflare-dns-configurator-views
 # Run migration and clear cache
 php artisan migrate
 php artisan config:clear
+php artisan view:clear
 ```
 
 ### 4. Test It
