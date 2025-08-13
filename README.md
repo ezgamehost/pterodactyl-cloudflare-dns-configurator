@@ -1,0 +1,1 @@
+# whmcs-pterodactyl-cloudflare-dns-configurator
